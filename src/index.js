@@ -5,9 +5,9 @@ import _ from 'lodash';
 const getPath = (fileName) => {
     return path.resolve(process.cwd(), fileName);
 };
-const getFileFormat = (fileName) => {
-    return path.extname(fileName).slice(1);
-};
+// const getFileFormat = (fileName) => {
+//     return path.extname(fileName).slice(1);
+// };
 const readFile = (filePath) => readFileSync(filePath, 'utf8');
 
 const compare = (data1, data2) => {
@@ -35,10 +35,10 @@ const compare = (data1, data2) => {
         // return { key, value: { oldValue: data1[key], newValue: data2[key] }, state: 'updated' };
     });
     // return result;
-    return obj;
+    return obj.trim();
 };
 
-const parser = (filepath1, filepath2, option) => {
+const parser = (filepath1, filepath2) => {
     const path1 = getPath(filepath1);
     const data1 = JSON.parse(readFile(path1));
 
