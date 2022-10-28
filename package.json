@@ -8,7 +8,7 @@
     "gendiff": "bin/gendiff.js"
   },
   "scripts": {
-    "test": "jest",
+    "test": "npx jest",
     "lint": "eslint index.js"
   },
   "repository": {
