@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import parser from '../src/index.js';
 import { Command } from 'commander';
+import parser from '../src/index.js';
+
 const program = new Command();
 
 program
@@ -14,6 +15,6 @@ program
   .argument('<filepath2>')
   .action((filepath1, filepath2, options) => {
     console.log(parser(filepath1, filepath2, options.format));
-  }); 
+  });
 
 program.parse();
