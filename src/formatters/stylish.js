@@ -1,13 +1,14 @@
 import _ from 'lodash';
 
 const indent = (depthLevel, count = 4) => ' '.repeat(depthLevel * count - 2);
-const preVal = (value, depth) => {
+
+const formattingNestedData = (value, depth) => {
   if (!_.isPlainObject(value)) {
     return value;
   }
 
   const result = Object.entries(value).map(([key, val]) => {
-    const handledContent = `${preVal(val, depth + 1)}`;
+    const handledContent = `${formattingNestedData(val, depth + 1)}`;
     return `${indent(depth + 1)}  ${key}: ${handledContent}`;
   });
 
@@ -15,28 +16,28 @@ const preVal = (value, depth) => {
 };
 
 const formatter = (diff, depth) => {
-  const result = diff.map((obj) => {
-    switch (obj.state) {
+  const result = diff.map(({ state, key, value }) => {
+    switch (state) {
       case 'added': {
-        const value = preVal(obj.value, depth);
-        return `${indent(depth)}+ ${obj.key}: ${value}`;
+        const val = formattingNestedData(value, depth);
+        return `${indent(depth)}+ ${key}: ${val}`;
       }
       case 'removed': {
-        const value = preVal(obj.value, depth);
-        return `${indent(depth)}- ${obj.key}: ${value}`;
+        const val = formattingNestedData(value, depth);
+        return `${indent(depth)}- ${key}: ${val}`;
       }
       case 'unchanged': {
-        const value = preVal(obj.value, depth);
-        return `${indent(depth)}  ${obj.key}: ${value}`;
+        const val = formattingNestedData(value, depth);
+        return `${indent(depth)}  ${key}: ${val}`;
       }
       case 'updated': {
-        const valOld = preVal(obj.value.oldValue, depth);
-        const valNew = preVal(obj.value.newValue, depth);
-        return `${indent(depth)}- ${obj.key}: ${valOld}\n${indent(depth)}+ ${obj.key}: ${valNew}`;
+        const valOld = formattingNestedData(value.oldValue, depth);
+        const valNew = formattingNestedData(value.newValue, depth);
+        return `${indent(depth)}- ${key}: ${valOld}\n${indent(depth)}+ ${key}: ${valNew}`;
       }
       default: {
-        const value = `{\n${formatter(obj.value, depth + 1)}\n${indent(depth)}  }`;
-        return `${indent(depth)}  ${obj.key}: ${value}`;
+        const val = `{\n${formatter(value, depth + 1)}\n${indent(depth)}  }`;
+        return `${indent(depth)}  ${key}: ${val}`;
       }
     }
   });

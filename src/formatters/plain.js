@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const preVal = (value) => {
+const formattingNestedData = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
   }
@@ -12,24 +12,24 @@ const preVal = (value) => {
 
 const formatter = (diff, path = '') => {
   const result = diff
-    .filter((obj) => obj.state !== 'unchanged')
-    .map((obj) => {
-      const newPath = `${path}.${obj.key}`;
-      switch (obj.state) {
+    .filter(({ state }) => state !== 'unchanged')
+    .map(({ state, key, value }) => {
+      const newPath = `${path}.${key}`;
+      switch (state) {
         case 'removed': {
           return `Property '${newPath.slice(1)}' was removed`;
         }
         case 'added': {
-          const val = preVal(obj.value);
+          const val = formattingNestedData(value);
           return `Property '${newPath.slice(1)}' was added with value: ${val}`;
         }
         case 'updated': {
-          const valOld = preVal(obj.value.oldValue);
-          const valNew = preVal(obj.value.newValue);
+          const valOld = formattingNestedData(value.oldValue);
+          const valNew = formattingNestedData(value.newValue);
           return `Property '${newPath.slice(1)}' was updated. From ${valOld} to ${valNew}`;
         }
         default: {
-          return formatter(obj.value, newPath);
+          return formatter(value, newPath);
         }
       }
     });
