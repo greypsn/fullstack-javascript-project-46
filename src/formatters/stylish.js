@@ -35,9 +35,12 @@ const formatter = (diff, depth) => {
         const valNew = formattingNestedData(value.newValue, depth);
         return `${indent(depth)}- ${key}: ${valOld}\n${indent(depth)}+ ${key}: ${valNew}`;
       }
-      default: {
+      case 'complex': {
         const val = `{\n${formatter(value, depth + 1)}\n${indent(depth)}  }`;
         return `${indent(depth)}  ${key}: ${val}`;
+      }
+      default: {
+        throw new Error(`Я исключение которое никогда не выбросится, но если вдруг то кейса - ${state} не ма :)`);
       }
     }
   });

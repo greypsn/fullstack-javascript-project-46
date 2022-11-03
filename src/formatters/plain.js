@@ -28,8 +28,11 @@ const formatter = (diff, path = '') => {
           const valNew = formattingNestedData(value.newValue);
           return `Property '${newPath.slice(1)}' was updated. From ${valOld} to ${valNew}`;
         }
-        default: {
+        case 'complex': {
           return formatter(value, newPath);
+        }
+        default: {
+          throw new Error(`Я исключение которое никогда не выбросится, но если вдруг то кейса - ${state} не ма :)`);
         }
       }
     });
