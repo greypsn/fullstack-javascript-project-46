@@ -40,7 +40,7 @@ const formatter = (diff, depth) => {
         return `${indent(depth)}  ${key}: ${val}`;
       }
       default: {
-        throw new Error(`Я исключение которое никогда не выбросится, но если вдруг то кейса - ${state} не ма :)`);
+        throw new Error(`Unknown state type ${state}`);
       }
     }
   });
